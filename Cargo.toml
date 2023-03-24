@@ -28,6 +28,8 @@ wasm-bindgen = { version = "0.2.62", default-features = false, optional = true }
 js-sys = { version = "0.3", optional = true }
 [target.'cfg(all(any(target_arch = "wasm32", target_arch = "wasm64"), target_os = "unknown"))'.dev-dependencies]
 wasm-bindgen-test = "0.3.18"
+[target.'cfg(all(any(target_arch = "wasm32", target_arch = "wasm64"), target_os = "unknown"))'.features]
+js = ["wasm-bindgen", "js-sys"]
 
 [features]
 # Implement std-only traits for getrandom::Error
@@ -35,7 +37,9 @@ std = []
 # Feature to enable fallback RDRAND-based implementation on x86/x86_64
 rdrand = []
 # Feature to enable JavaScript bindings on wasm*-unknown-unknown
-js = ["wasm-bindgen", "js-sys"]
+# Disable wasm*-unknown-unknown to break the circular dependency in ahash https://github.com/tkaitchuck/aHash/issues/95
+#js = ["wasm-bindgen", "js-sys"]
+js = []
 # Feature to enable custom RNG implementations
 custom = []
 # Unstable feature to support being a libstd dependency
